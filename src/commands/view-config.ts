@@ -1,8 +1,7 @@
-import { Command, PermissionLevel } from "disharmony"
+import { Command, PermissionLevel } from "@oliver4888/disharmony"
 import Message from "../models/message"
 
-async function invoke(_: string[], message: Message)
-{
+async function invoke(_: string[], message: Message) {
     return `\`\`\`JavaScript\n ${message.guild.getConfigJson()}\`\`\``
 }
 

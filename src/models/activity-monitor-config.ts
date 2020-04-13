@@ -1,6 +1,5 @@
-import { Config as DisharmonyConfig } from "disharmony"
+import { Config as DisharmonyConfig } from "@oliver4888/disharmony"
 
-export default interface ActivityMonitorConfig extends DisharmonyConfig
-{
+export default interface ActivityMonitorConfig extends DisharmonyConfig {
     cullingIntervalSec: number
 }

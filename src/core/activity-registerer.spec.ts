@@ -1,6 +1,6 @@
 // tslint:disable: no-unused-expression
 import { AsyncTest, Expect, Setup, TestFixture } from "alsatian"
-import { DisharmonyClient } from "disharmony"
+import { DisharmonyClient } from "@oliver4888/disharmony"
 import { IMock, It, Mock, Times } from "typemoq"
 import ActivityMonitorConfig from "../models/activity-monitor-config"
 import Guild from "../models/guild"
@@ -9,8 +9,7 @@ import Message from "../models/message"
 import ActivityRegisterer from "./activity-registerer"
 
 @TestFixture("Activity registerer")
-export class ActivityRegistererTestFixture
-{
+export class ActivityRegistererTestFixture {
     private client: DisharmonyClient<Message, Guild, GuildMember, ActivityMonitorConfig>
     private guild: IMock<Guild>
     private member: IMock<GuildMember>
@@ -20,8 +19,7 @@ export class ActivityRegistererTestFixture
     private guildUsers: Map<string, Date>
 
     @Setup
-    public setup()
-    {
+    public setup() {
         const client = {} as any
         client.config = {} as any
         client.config.requiredPermissions = 1
@@ -44,8 +42,7 @@ export class ActivityRegistererTestFixture
     }
 
     @AsyncTest()
-    public async register_activity_updates_member_when_all_bot_perms_valid()
-    {
+    public async register_activity_updates_member_when_all_bot_perms_valid() {
         // ARRANGE
         const now = new Date()
         this.member.setup(x => x.djs).returns(() => ({ roles: new Map() }) as any)
@@ -64,8 +61,7 @@ export class ActivityRegistererTestFixture
     }
 
     @AsyncTest()
-    public async register_activity_does_not_update_member_if_member_id_is_bot_id()
-    {
+    public async register_activity_does_not_update_member_if_member_id_is_bot_id() {
         // ARRANGE
         void (this.member.object.id)
         this.member.setup(x => x.id).returns(() => "bot-id")
@@ -80,8 +76,7 @@ export class ActivityRegistererTestFixture
     }
 
     @AsyncTest()
-    public async register_activity_does_not_update_member_if_bot_missing_required_perms()
-    {
+    public async register_activity_does_not_update_member_if_bot_missing_required_perms() {
         // ARRANGE
         void (this.guild.object.botHasPermissions(0))
         this.guild.setup(x => x.botHasPermissions(It.isAnyNumber())).returns(() => false)
@@ -96,8 +91,7 @@ export class ActivityRegistererTestFixture
     }
 
     @AsyncTest()
-    public async register_activity_does_not_update_member_if_guild_does_not_allow_role_addition()
-    {
+    public async register_activity_does_not_update_member_if_guild_does_not_allow_role_addition() {
         // ARRANGE
         void (this.guild.object.allowRoleAddition)
         this.guild.setup(x => x.allowRoleAddition).returns(() => false)
@@ -112,8 +106,7 @@ export class ActivityRegistererTestFixture
     }
 
     @AsyncTest()
-    public async register_activity_does_not_update_member_if_member_is_ignored()
-    {
+    public async register_activity_does_not_update_member_if_member_is_ignored() {
         // ARRANGE
         void (this.guild.object.isMemberIgnored(It.isAny()))
         this.guild.setup(x => x.isMemberIgnored(It.isAny())).returns(() => true)
@@ -128,8 +121,7 @@ export class ActivityRegistererTestFixture
     }
 
     @AsyncTest()
-    public async register_activity_does_not_update_member_if_active_role_not_configured()
-    {
+    public async register_activity_does_not_update_member_if_active_role_not_configured() {
         // ARRANGE
         void (this.guild.object.isRoleConfigured(this.activeRoleId))
         this.guild.setup(x => x.isRoleConfigured(this.activeRoleId)).returns(() => false)
@@ -144,8 +136,7 @@ export class ActivityRegistererTestFixture
     }
 
     @AsyncTest()
-    public async register_activity_does_not_update_member_if_active_role_badly_configured()
-    {
+    public async register_activity_does_not_update_member_if_active_role_badly_configured() {
         // ARRANGE
         void (this.guild.object.isRoleBadlyConfigured(this.activeRoleId))
         this.guild.setup(x => x.isRoleBadlyConfigured(this.activeRoleId)).returns(() => true)

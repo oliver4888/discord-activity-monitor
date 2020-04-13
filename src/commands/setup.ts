@@ -1,13 +1,11 @@
-import { Client, Command, CommandRejection, Logger, PermissionLevel } from "disharmony"
+import { Client, Command, CommandRejection, Logger, PermissionLevel } from "@oliver4888/disharmony"
 import SetupHelper from "../core/setup-helper"
 import Message from "../models/message"
 
-async function invoke(_: string[], message: Message, client: Client)
-{
+async function invoke(_: string[], message: Message, client: Client) {
     const setupHelper = new SetupHelper()
 
-    try
-    {
+    try {
         Logger.logEvent("SetupInitiated", { guildId: message.guild.id })
 
         await setupHelper.walkThroughSetup(client, message)
@@ -24,8 +22,7 @@ async function invoke(_: string[], message: Message, client: Client)
 
         Logger.logEvent("SetupCompleted", { guildId: message.guild.id })
     }
-    catch (e)
-    {
+    catch (e) {
         Logger.logEvent("SetupRejected", { guildId: message.guild.id })
         throw new CommandRejection(`Error during setup for guild ${message.guild.id}.\n`)
     }

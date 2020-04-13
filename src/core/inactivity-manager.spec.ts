@@ -1,6 +1,6 @@
 import { AsyncTest, Expect, Setup, TestFixture } from "alsatian"
 import { Role } from "discord.js"
-import { DisharmonyClient } from "disharmony"
+import { DisharmonyClient } from "@oliver4888/disharmony"
 import { IMock, It, Mock, Times } from "typemoq"
 import Guild from "../models/guild"
 import GuildMember from "../models/guild-member"
@@ -8,8 +8,7 @@ import Message from "../models/message"
 import InactivityManager from "./inactivity-manager"
 
 @TestFixture("Inactivity manager")
-export class InactivityManagerTestFixture
-{
+export class InactivityManagerTestFixture {
     private guildUsers: Map<string, Date>
     private activeRoleId = "active-role"
     private inactiveRoleId = "inactive-role"
@@ -22,8 +21,7 @@ export class InactivityManagerTestFixture
     private activeRole: IMock<Role>
 
     @Setup
-    public setup()
-    {
+    public setup() {
         this.guildUsers = new Map<string, Date>()
 
         this.client = Mock.ofType<DisharmonyClient<Message, Guild, GuildMember>>()
@@ -49,8 +47,7 @@ export class InactivityManagerTestFixture
     }
 
     @AsyncTest()
-    public async untracked_member_with_active_role_added_to_users()
-    {
+    public async untracked_member_with_active_role_added_to_users() {
         // ARRANGE
         const now = new Date()
 
@@ -64,8 +61,7 @@ export class InactivityManagerTestFixture
     }
 
     @AsyncTest()
-    public async untracked_member_with_active_role_not_added_to_users_if_ignored()
-    {
+    public async untracked_member_with_active_role_not_added_to_users_if_ignored() {
         // ARRANGE
         void (this.guild.object.isMemberIgnored({} as any))
         this.guild.setup(x => x.isMemberIgnored(It.isAny())).returns(() => true)
@@ -79,8 +75,7 @@ export class InactivityManagerTestFixture
     }
 
     @AsyncTest()
-    public async untracked_member_with_active_role_not_added_to_users_if_bot_missing_required_perms()
-    {
+    public async untracked_member_with_active_role_not_added_to_users_if_bot_missing_required_perms() {
         // ARRANGE
         void (this.guild.object.botHasPermissions(0))
         this.guild.setup(x => x.botHasPermissions(It.isAny())).returns(() => false)
@@ -94,8 +89,7 @@ export class InactivityManagerTestFixture
     }
 
     @AsyncTest()
-    public async active_role_removed_if_all_bot_perms_valid()
-    {
+    public async active_role_removed_if_all_bot_perms_valid() {
         // ARRANGE
         const now = new Date(2000, 1, 10)
         this.guildUsers.set(this.memberId, new Date(2000, 1, 1))
@@ -111,8 +105,7 @@ export class InactivityManagerTestFixture
     }
 
     @AsyncTest()
-    public async active_role_not_removed_if_bot_missing_required_perms()
-    {
+    public async active_role_not_removed_if_bot_missing_required_perms() {
         // ARRANGE
         void (this.guild.object.botHasPermissions(0))
         this.guild.setup(x => x.botHasPermissions(It.isAny())).returns(() => false)
@@ -131,8 +124,7 @@ export class InactivityManagerTestFixture
     }
 
     @AsyncTest()
-    public async roles_not_managed_if_active_role_not_well_configured()
-    {
+    public async roles_not_managed_if_active_role_not_well_configured() {
         // ARRANGE
         const now = new Date(2000, 1, 10)
         this.guildUsers.set(this.memberId, new Date(2000, 1, 1))
@@ -155,8 +147,7 @@ export class InactivityManagerTestFixture
     }
 
     @AsyncTest()
-    public async member_considered_inactive_when_last_active_half_a_day_beyond_threshold()
-    {
+    public async member_considered_inactive_when_last_active_half_a_day_beyond_threshold() {
         // ARRANGE
         const now = new Date(2000, 1, 10, 0, 0, 0)
         this.guildUsers.set(this.memberId, new Date(2000, 1, 8, 12, 0, 0))
@@ -172,8 +163,7 @@ export class InactivityManagerTestFixture
     }
 
     @AsyncTest()
-    public async member_not_considered_inactive_if_last_active_under_half_a_day_beyond_threshold()
-    {
+    public async member_not_considered_inactive_if_last_active_under_half_a_day_beyond_threshold() {
         // ARRANGE
         const now = new Date(2000, 1, 10, 0, 0, 0)
         this.guildUsers.set(this.memberId, new Date(2000, 1, 8, 12, 0, 1))
@@ -189,8 +179,7 @@ export class InactivityManagerTestFixture
     }
 
     @AsyncTest()
-    public async inactive_role_added_when_active_role_removed_if_inactive_role_well_configured()
-    {
+    public async inactive_role_added_when_active_role_removed_if_inactive_role_well_configured() {
         // ARRANGE
         const now = new Date(2000, 1, 10)
         this.guildUsers.set(this.memberId, new Date(2000, 1, 1))
@@ -215,8 +204,7 @@ export class InactivityManagerTestFixture
     }
 
     @AsyncTest()
-    public async inactive_role_not_added_if_not_well_configured()
-    {
+    public async inactive_role_not_added_if_not_well_configured() {
         // ARRANGE
         const now = new Date(2000, 1, 10)
         this.guildUsers.set(this.memberId, new Date(2000, 1, 1))
@@ -237,8 +225,7 @@ export class InactivityManagerTestFixture
     }
 
     @AsyncTest()
-    public async inactive_role_not_added_if_bot_missing_required_perms()
-    {
+    public async inactive_role_not_added_if_bot_missing_required_perms() {
         // ARRANGE
         void (this.guild.object.botHasPermissions(0))
         this.guild.setup(x => x.botHasPermissions(It.isAny())).returns(() => false)
@@ -257,8 +244,7 @@ export class InactivityManagerTestFixture
     }
 
     @AsyncTest()
-    public async inactive_member_removed_from_users()
-    {
+    public async inactive_member_removed_from_users() {
         // ARRANGE
         const now = new Date(2000, 1, 10)
         this.guildUsers.set(this.memberId, new Date(2000, 1, 1))
@@ -272,8 +258,7 @@ export class InactivityManagerTestFixture
     }
 
     @AsyncTest()
-    public async inactive_member_not_removed_from_users_if_bot_missing_required_perms()
-    {
+    public async inactive_member_not_removed_from_users_if_bot_missing_required_perms() {
         // ARRANGE
         void (this.guild.object.botHasPermissions(0))
         this.guild.setup(x => x.botHasPermissions(It.isAny())).returns(() => false)
